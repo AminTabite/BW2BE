@@ -2,9 +2,7 @@ package Gruppo4BW2BE.BW2.Services;
 
 import Gruppo4BW2BE.BW2.Entities.Cliente;
 import Gruppo4BW2BE.BW2.Entities.Fattura;
-import Gruppo4BW2BE.BW2.Exceptions.BadRequestException;
 import Gruppo4BW2BE.BW2.Exceptions.NotFoundException;
-import Gruppo4BW2BE.BW2.Exceptions.ValidationException;
 import Gruppo4BW2BE.BW2.Repositories.ClienteRepository;
 import Gruppo4BW2BE.BW2.Repositories.FatturaRepository;
 import org.springframework.data.domain.Page;
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.UUID;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Optional;
 
 @Service
 public class FatturaService {
