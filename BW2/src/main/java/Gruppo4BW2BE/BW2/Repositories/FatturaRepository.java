@@ -1,11 +1,44 @@
 package Gruppo4BW2BE.BW2.Repositories;
 
 import Gruppo4BW2BE.BW2.Entities.Fattura;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
-@Repository
-public interface FatturaRepository extends JpaRepository <Fattura, UUID> {
+public interface FatturaRepository extends JpaRepository<Fattura, Long> {
+    @Query(
+            value = """
+            SELECT * FROM invoices f
+            WHERE (:clienteId IS NULL OR f.client_id = :clienteId)
+              AND (:stato IS NULL OR :stato = '' OR f.stato = :stato)
+              AND (:data IS NULL OR f.invoice_date = :data)
+              AND (:anno IS NULL OR EXTRACT(YEAR FROM f.invoice_date) = :anno)
+              AND (:minImporto IS NULL OR f.amount >= :minImporto)
+              AND (:maxImporto IS NULL OR f.amount <= :maxImporto)
+            """,
+            countQuery = """
+            SELECT count(*) FROM invoices f
+            WHERE (:clienteId IS NULL OR f.client_id = :clienteId)
+              AND (:stato IS NULL OR :stato = '' OR f.stato = :stato)
+              AND (:data IS NULL OR f.invoice_date = :data)
+              AND (:anno IS NULL OR EXTRACT(YEAR FROM f.invoice_date) = :anno)
+              AND (:minImporto IS NULL OR f.amount >= :minImporto)
+              AND (:maxImporto IS NULL OR f.amount <= :maxImporto)
+            """,
+            nativeQuery = true
+    )
+    Page<Fattura> filtraFatture(
+            @Param("clienteId") Long clienteId,
+            @Param("stato") String stato,
+            @Param("data") LocalDate data,
+            @Param("anno") Integer anno,
+            @Param("minImporto") BigDecimal minImporto,
+            @Param("maxImporto") BigDecimal maxImporto,
+            Pageable pageable
+    );
 }
