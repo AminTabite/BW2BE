@@ -48,7 +48,7 @@ public class ClienteService {
     // Trova un cliente tramite il suo ID
     public Cliente findById(UUID id) {
         return clienteRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Cliente", id));
+                .orElseThrow(() -> new NotFoundException("Cliente"));
     }
 
     // Elimina Cliente
