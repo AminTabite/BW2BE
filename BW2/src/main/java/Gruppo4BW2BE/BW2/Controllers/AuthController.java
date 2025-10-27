@@ -28,7 +28,7 @@ public class AuthController {
     }
 
 
-    @PostMapping("register")
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public Utente createUtente(@RequestBody @Validated UtentePayload payload, BindingResult validationResult){
         if (validationResult.hasErrors()) {

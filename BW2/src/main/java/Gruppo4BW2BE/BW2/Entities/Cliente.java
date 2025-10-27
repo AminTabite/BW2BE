@@ -37,6 +37,8 @@ public class Cliente {
     private String pec;
 
     @ManyToOne
+    @JoinColumn(name = "utente_id")
+    private Utente utente;
 
     private String telefono;
 
@@ -61,6 +63,9 @@ public class Cliente {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "indirizzo_sede_operativa_id", referencedColumnName = "id")
     private Indirizzo indirizzoSedeOperativa;
+
+
+
 
     public Cliente() {
 

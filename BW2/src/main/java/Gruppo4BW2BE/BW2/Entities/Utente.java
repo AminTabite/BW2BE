@@ -21,7 +21,7 @@ public class Utente implements UserDetails {
     @Id
     @Generated
     @Setter(AccessLevel.NONE)
-    UUID utenteId;
+    UUID id;
 
     @Enumerated(EnumType.STRING)
     TipoUtente role;

@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "invoices", indexes = {@Index(columnList = "invoice_date"), @Index(columnList = "amount")})
+@Table(name = "fattura", indexes = {@Index(columnList = "invoice_date"), @Index(columnList = "amount")})
 public class Fattura {
 
     @Id
