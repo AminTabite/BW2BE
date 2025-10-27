@@ -39,7 +39,7 @@ public class Utente implements UserDetails {
     @Column(name = "avatar_url")
     private String avatarURL;
 
-    @OneToMany(mappedBy = "utenteid")
+    @OneToMany(mappedBy = "id")
     List<Cliente> clienti;
 
 

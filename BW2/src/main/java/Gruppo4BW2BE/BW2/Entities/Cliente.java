@@ -36,6 +36,8 @@ public class Cliente {
     @Column(unique = true)
     private String pec;
 
+    @ManyToOne
+
     private String telefono;
 
     private String emailContatto;
