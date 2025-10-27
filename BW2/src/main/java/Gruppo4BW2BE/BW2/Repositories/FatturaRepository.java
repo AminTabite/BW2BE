@@ -6,12 +6,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public interface FatturaRepository extends JpaRepository<Fattura, Long> {
     @Query(
+            //value query principale per recuperare i dati
+            //countQuery query per calcolare il numero totale di risultati
+            //nativeQuery = true, indica che la query è SQL nativo, non JPQL
             value = """
             SELECT * FROM invoices f
             WHERE (:clienteId IS NULL OR f.client_id = :clienteId)
@@ -32,6 +34,7 @@ public interface FatturaRepository extends JpaRepository<Fattura, Long> {
             """,
             nativeQuery = true
     )
+    //Metodo che restituisce una pagina di fatture filtrate secondo i parametri passati
     Page<Fattura> filtraFatture(
             @Param("clienteId") Long clienteId,
             @Param("stato") String stato,

@@ -65,9 +65,10 @@ public class FatturaService {
     }
 
     public Page<Fattura> search(Long clienteId, String stato, LocalDate data,
-                                       Integer anno, BigDecimal importoMin, BigDecimal importoMax, Pageable pageable) {
+                                Integer anno, BigDecimal importoMin, BigDecimal importoMax, Pageable pageable) {
 
         return fatturaRepository.filtraFatture(clienteId, stato, data, anno, importoMin, importoMax, pageable);
     }
 }
+
 

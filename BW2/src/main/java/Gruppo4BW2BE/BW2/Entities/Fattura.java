@@ -31,12 +31,12 @@ public class Fattura {
     @Column(name = "amount", nullable = false)
     private BigDecimal importo;
 
-    // relazione con cliente (resta una FK a clients.id)
+    //relazione con cliente
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "client_id")
     private Cliente cliente;
 
-    // stato come stringa (es. "EMESSA", "PAGATA", "ANNULLATA")
+    //stato come stringa
     @NotNull
     @Column(name = "stato", nullable = false, length = 50)
     private String stato;
@@ -49,7 +49,7 @@ public class Fattura {
 
     public Fattura() {}
 
-    // getter/setter
+    //getter e setter
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
 
