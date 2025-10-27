@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/fatture")
+@RequestMapping("/fatture")
 public class FatturaController {
 
     private final FatturaService service;

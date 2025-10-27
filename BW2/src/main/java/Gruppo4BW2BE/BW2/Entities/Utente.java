@@ -3,7 +3,11 @@ package Gruppo4BW2BE.BW2.Entities;
 import Gruppo4BW2BE.BW2.Enums.TipoUtente;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -13,7 +17,7 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 
-public class Utente {
+public class Utente implements UserDetails {
     @Id
     @Generated
     @Setter(AccessLevel.NONE)
@@ -35,12 +39,41 @@ public class Utente {
     @Column(name = "avatar_url")
     private String avatarURL;
 
-    public Utente( String username, String email, String password, String nome, String cognome, String avatarURL) {
+    @OneToMany(mappedBy = "utenteid")
+    List<Cliente> clienti;
+
+
+    public Utente( String username, String email, String password, String nome, String cognome) {
         this.role = TipoUtente.USER;
         this.username = username;
         this.email = email;
         this.password = password;
         this.nome = nome;
         this.cognome = cognome;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
     }
 }
