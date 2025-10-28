@@ -17,5 +17,5 @@ public class Ruolo {
     private UUID id;
 
     @Column(nullable = false, unique = true)
-    private String nome; // es: "ROLE_USER", "ROLE_ADMIN"
+    private String nome;
 }

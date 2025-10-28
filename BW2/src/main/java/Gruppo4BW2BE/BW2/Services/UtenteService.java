@@ -2,9 +2,11 @@ package Gruppo4BW2BE.BW2.Services;
 
 
 import Gruppo4BW2BE.BW2.Entities.Cliente;
+import Gruppo4BW2BE.BW2.Entities.Ruolo;
 import Gruppo4BW2BE.BW2.Entities.Utente;
 import Gruppo4BW2BE.BW2.Exceptions.NotFoundException;
 import Gruppo4BW2BE.BW2.Payloads.UtentePayload;
+import Gruppo4BW2BE.BW2.Repositories.RuoloRepository;
 import Gruppo4BW2BE.BW2.Repositories.UtenteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class UtenteService {
 
     @Autowired
     PasswordEncoder bcrypt;
+
+    @Autowired
+    RuoloRepository ruoloRepository;
 
 
     // Recuperare tutti gli Utenti paginati
@@ -49,6 +54,13 @@ public class UtenteService {
             payload.nome(),
             payload.cognome()
     );
+         //per mettere di default il ruolo di user
+        Ruolo ruoloUser = ruoloRepository.findByNome("ROLE_USER")
+                .orElseThrow(() -> new RuntimeException("Ruolo ROLE_USER non trovato!"));
+
+        newUtente.getRuoli().add(ruoloUser);
+
+
 
     Utente savedUtente = utenteRepository.save(newUtente);
         log.info("Utente " + savedUtente.getCognome() + " salvato correttamente!");
@@ -97,6 +109,15 @@ public void findByIdAndDelete(UUID utenteId){
         return this.utenteRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Utente con l'email  non è stato trovato"));
     }
 
+
+    public void assegnaRuolo(UUID utenteId, String nomeRuolo) {
+         Utente found = findById(utenteId);
+         Ruolo ruolofound = ruoloRepository.findByNome(nomeRuolo)
+                .orElseThrow(() -> new RuntimeException("Ruolo non trovato: " + nomeRuolo));
+
+        found.getRuoli().add(ruolofound);
+        utenteRepository.save(found);
+    }
 
 
 }
