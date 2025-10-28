@@ -36,10 +36,6 @@ public class Cliente {
     @Column(unique = true)
     private String pec;
 
-    @ManyToOne
-    @JoinColumn(name = "utente_id")
-    private Utente utente;
-
     private String telefono;
 
     private String emailContatto;
