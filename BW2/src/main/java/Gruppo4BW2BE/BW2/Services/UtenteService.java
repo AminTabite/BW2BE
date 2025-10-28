@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -21,6 +22,9 @@ import java.util.UUID;
 public class UtenteService {
     @Autowired
     UtenteRepository utenteRepository;
+
+    @Autowired
+    PasswordEncoder bcrypt;
 
 
     // Recuperare tutti gli Utenti paginati
@@ -41,7 +45,7 @@ public class UtenteService {
     Utente newUtente = new Utente(
             payload.username(),
             payload.email(),
-            payload.password(),
+            bcrypt.encode(payload.password()),
             payload.nome(),
             payload.cognome()
     );

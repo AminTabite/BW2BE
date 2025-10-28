@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class Utente implements UserDetails {
     @Id
-    @Generated
+    @GeneratedValue
     @Setter(AccessLevel.NONE)
     UUID id;
 

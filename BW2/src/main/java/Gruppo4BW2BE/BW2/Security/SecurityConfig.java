@@ -41,9 +41,11 @@ public class SecurityConfig {
 
                 //endpoint disponibili SOLO DOPO AUTENTICAZIONE
                 .requestMatchers("/clienti/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/fatture/**").hasAnyRole( "ADMIN")
-                        .requestMatchers("/fatture/{id}").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/clienti/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/fatture/**").hasAuthority( "ADMIN")
+                        .requestMatchers("/fatture/{id}").hasAuthority("ADMIN")
+                        .requestMatchers("/clienti/**").hasAuthority( "ADMIN")
+                        .requestMatchers("/clienti/**").hasAuthority( "USER")
+                        .requestMatchers("/utenti/**").hasAuthority("ADMIN")
 
 //                .requestMatchers("//**").hasRole("USER")
                 .anyRequest().authenticated()
