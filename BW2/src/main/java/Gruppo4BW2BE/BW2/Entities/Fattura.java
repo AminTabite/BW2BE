@@ -37,9 +37,11 @@ public class Fattura {
     private Cliente cliente;
 
     //stato come stringa
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "state_id", nullable = false)
     @NotNull
-    @Column(name = "stato", nullable = false, length = 50)
-    private String stato;
+    private StatoFattura stato;
+
 
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt = OffsetDateTime.now();
@@ -65,8 +67,8 @@ public class Fattura {
     public Cliente getCliente() { return cliente; }
     public void setCliente(Cliente cliente) { this.cliente = cliente; }
 
-    public String getStato() { return stato; }
-    public void setStato(String stato) { this.stato = stato; }
+    public StatoFattura getStato() { return stato; }
+    public void setStato(StatoFattura stato) { this.stato = stato; }
 
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
