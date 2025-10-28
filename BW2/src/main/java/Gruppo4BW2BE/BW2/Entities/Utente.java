@@ -1,6 +1,5 @@
 package Gruppo4BW2BE.BW2.Entities;
 
-import Gruppo4BW2BE.BW2.Enums.TipoUtente;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,8 +22,6 @@ public class Utente implements UserDetails {
     @Setter(AccessLevel.NONE)
     UUID id;
 
-    @Enumerated(EnumType.STRING)
-    TipoUtente role;
 
     String username;
 
@@ -43,8 +40,9 @@ public class Utente implements UserDetails {
     List<Cliente> clienti;
 
 
+
+
     public Utente( String username, String email, String password, String nome, String cognome) {
-        this.role = TipoUtente.USER;
         this.username = username;
         this.email = email;
         this.password = password;

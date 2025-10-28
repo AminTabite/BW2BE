@@ -1,6 +1,5 @@
 package Gruppo4BW2BE.BW2.Payloads;
 
-import Gruppo4BW2BE.BW2.Enums.TipoUtente;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
