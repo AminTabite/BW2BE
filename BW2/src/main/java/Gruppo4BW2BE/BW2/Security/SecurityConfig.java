@@ -43,9 +43,9 @@ public class SecurityConfig {
                 .requestMatchers("/clienti/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/fatture/**").hasAuthority( "ADMIN")
                         .requestMatchers("/fatture/{id}").hasAuthority("ADMIN")
-                        .requestMatchers("/clienti/**").hasAuthority( "ADMIN")
-                        .requestMatchers("/clienti/**").hasAuthority( "USER")
-                        .requestMatchers("/utenti/**").hasAuthority("ADMIN")
+                        .requestMatchers("/clienti/**").hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers("/utenti/**").hasAnyRole("USER", "ADMIN")
 
 //                .requestMatchers("//**").hasRole("USER")
                 .anyRequest().authenticated()
