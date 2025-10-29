@@ -1,6 +1,7 @@
 package Gruppo4BW2BE.BW2.Repositories;
 
 import Gruppo4BW2BE.BW2.Entities.Fattura;
+import Gruppo4BW2BE.BW2.Entities.StatoFattura;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public interface FatturaRepository extends JpaRepository<Fattura, Long> {
     @Query(
@@ -44,4 +46,8 @@ public interface FatturaRepository extends JpaRepository<Fattura, Long> {
             @Param("maxImporto") BigDecimal maxImporto,
             Pageable pageable
     );
+
+    Page<Fattura> findByStato(StatoFattura stato, Pageable pageable);
+
+
 }

@@ -2,9 +2,11 @@ package Gruppo4BW2BE.BW2.Services;
 
 import Gruppo4BW2BE.BW2.Entities.Cliente;
 import Gruppo4BW2BE.BW2.Entities.Fattura;
+import Gruppo4BW2BE.BW2.Entities.StatoFattura;
 import Gruppo4BW2BE.BW2.Exceptions.NotFoundException;
 import Gruppo4BW2BE.BW2.Repositories.ClienteRepository;
 import Gruppo4BW2BE.BW2.Repositories.FatturaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -59,6 +61,17 @@ public class FatturaService {
 
     public Page<Fattura> listaPaginata(Pageable pageable) {
         return fatturaRepository.findAll(pageable);
+    }
+
+    public Fattura cambiaStato(UUID id, StatoFattura nuovoStato) {
+        Fattura fattura = fatturaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Fattura non trovata"));
+        fattura.setStato(nuovoStato);
+        return fatturaRepository.save(fattura);
+    }
+
+    public Page<Fattura> getFattureByStato(StatoFattura stato, Pageable pageable) {
+        return fatturaRepository.findByStato(stato, pageable);
     }
 
     public Page<Fattura> search(Long clienteId, String stato, LocalDate data,

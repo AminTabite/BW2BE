@@ -1,6 +1,7 @@
 package Gruppo4BW2BE.BW2.Controllers;
 
 import Gruppo4BW2BE.BW2.Entities.Fattura;
+import Gruppo4BW2BE.BW2.Entities.StatoFattura;
 import Gruppo4BW2BE.BW2.Services.FatturaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,6 +53,18 @@ public class FatturaController {
     public ResponseEntity<Fattura> findById(@PathVariable Long id) {
         //chiama il service per recuperare la fattura tramite ID
         return ResponseEntity.ok(service.findById(id));
+    }
+
+    @PatchMapping("/{id}/stato")
+    public ResponseEntity<Fattura> cambiaStato(@PathVariable UUID id, @RequestParam StatoFattura nuovoStato) {
+        Fattura aggiornata = service.cambiaStato(id, nuovoStato);
+        return ResponseEntity.ok(aggiornata);
+    }
+
+    @GetMapping("/stato/{stato}")
+    public ResponseEntity<Page<Fattura>> getFattureByStato(@PathVariable StatoFattura stato, Pageable pageable) {
+        Page<Fattura> page = service.getFattureByStato(stato, pageable);
+        return ResponseEntity.ok(page);
     }
 
     //ricerca
