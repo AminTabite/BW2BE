@@ -52,7 +52,8 @@ public class UtenteService {
             payload.email(),
             bcrypt.encode(payload.password()),
             payload.nome(),
-            payload.cognome()
+            payload.cognome(),
+            payload.ruolo()
     );
          //per mettere di default il ruolo di user
         Ruolo ruoloUser = ruoloRepository.findByNome("ROLE_USER")

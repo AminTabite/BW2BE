@@ -37,8 +37,6 @@ public class Utente implements UserDetails {
     @Column(name = "avatar_url")
     private String avatarURL;
 
-    @OneToMany(mappedBy = "id")
-    List<Cliente> clienti;
 
     @ManyToMany
     @JoinTable(

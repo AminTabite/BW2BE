@@ -16,7 +16,12 @@ public record UtentePayload(
         String nome,
         @NotBlank
         @Size(min = 3, max = 20, message = "cognome deve avere almeno 3 caratteri e max 20")
-        String cognome
+        String cognome,
+
+        @NotBlank
+        String ruolo
+
+
 ) {
 
 
