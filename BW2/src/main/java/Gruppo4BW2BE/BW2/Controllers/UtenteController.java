@@ -7,6 +7,8 @@ import Gruppo4BW2BE.BW2.Services.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,4 +66,13 @@ public class UtenteController {
         return utenteCorrente;
     }
 
+    // Creazione da admin (può settare ruoli)
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping
+    public ResponseEntity<Utente> createByAdmin(@RequestBody Utente payload) {
+        UtenteController service = null;
+        ResponseEntity<Utente> created = service.createByAdmin(payload);
+        return ResponseEntity.status(201).body(created.getBody());
+    }
+    
 }
