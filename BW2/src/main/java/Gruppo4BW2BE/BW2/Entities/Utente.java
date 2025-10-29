@@ -1,11 +1,11 @@
 package Gruppo4BW2BE.BW2.Entities;
 
-import Gruppo4BW2BE.BW2.Enums.TipoUtente;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -19,12 +19,10 @@ import java.util.UUID;
 
 public class Utente implements UserDetails {
     @Id
-    @Generated
+    @GeneratedValue
     @Setter(AccessLevel.NONE)
-    UUID utenteId;
+    UUID id;
 
-    @Enumerated(EnumType.STRING)
-    TipoUtente role;
 
     String username;
 
@@ -42,9 +40,17 @@ public class Utente implements UserDetails {
     @OneToMany(mappedBy = "id")
     List<Cliente> clienti;
 
+    @ManyToMany
+    @JoinTable(
+            name = "utenti_ruoli",
+            joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "id")
+    )
+
+    private List<Ruolo> ruoli = new ArrayList<>();
+
 
     public Utente( String username, String email, String password, String nome, String cognome) {
-        this.role = TipoUtente.USER;
         this.username = username;
         this.email = email;
         this.password = password;
@@ -52,9 +58,12 @@ public class Utente implements UserDetails {
         this.cognome = cognome;
     }
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return ruoli.stream()
+                .map(ruolo -> (GrantedAuthority) () -> ruolo.getNome())
+                .toList();
     }
 
     @Override

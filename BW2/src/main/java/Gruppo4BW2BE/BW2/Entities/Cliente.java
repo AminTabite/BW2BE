@@ -60,6 +60,9 @@ public class Cliente {
     @JoinColumn(name = "indirizzo_sede_operativa_id", referencedColumnName = "id")
     private Indirizzo indirizzoSedeOperativa;
 
+
+
+
     public Cliente() {
 
     }
