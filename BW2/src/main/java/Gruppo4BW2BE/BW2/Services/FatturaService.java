@@ -35,7 +35,7 @@ public class FatturaService {
     //trova per ID
     public Fattura findById(UUID id) {
         return fatturaRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Fattura non trovata con id: " + id));
+                .orElseThrow(() -> new NotFoundException("FatturaPayload non trovata con id: " + id));
     }
 
     //modifica
@@ -54,7 +54,7 @@ public class FatturaService {
     //elimina
     public void delete(UUID id) {
         if (!fatturaRepository.existsById(id)) {
-            throw new NotFoundException("Fattura non trovata con id: " + id);
+            throw new NotFoundException("FatturaPayload non trovata con id: " + id);
         }
         fatturaRepository.deleteById(id);
     }
@@ -65,7 +65,7 @@ public class FatturaService {
 
     public Fattura cambiaStato(UUID id, StatoFattura nuovoStato) {
         Fattura fattura = fatturaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Fattura non trovata"));
+                .orElseThrow(() -> new EntityNotFoundException("FatturaPayload non trovata"));
         fattura.setStato(nuovoStato);
         return fatturaRepository.save(fattura);
     }

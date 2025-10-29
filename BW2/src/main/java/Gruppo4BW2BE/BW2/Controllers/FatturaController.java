@@ -25,7 +25,7 @@ public class FatturaController {
     //creazione fattura
     @PostMapping("/cliente/{clienteId}")
     //@PathVariable prende l'id del cliente dalla URL
-    //@RequestBody prende l’oggetto Fattura
+    //@RequestBody prende l’oggetto FatturaPayload
     public ResponseEntity<Fattura> create(@PathVariable UUID clienteId, @RequestBody Fattura fattura) {
         //chiama il service per creare la fattura associata al cliente
         Fattura created = service.create(fattura, clienteId);
