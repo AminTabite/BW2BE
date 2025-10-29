@@ -47,11 +47,11 @@ public class UtenteService {
 
     public Utente saveNewUtente(UtentePayload payload){
         //in caso l'utente non inserisce ruolo oppure e' null
-
-         String ruoloDaAssegnare = (payload.ruolo() == null || payload.ruolo().isBlank())
-                ? "ROLE_USER"
-
-                : payload.ruolo();
+//
+//         String ruoloDaAssegnare = (payload.ruolo() == null || payload.ruolo().isBlank())
+//                ? "ROLE_USER"
+//
+//                : payload.ruolo();
 
 
     Utente newUtente = new Utente(
@@ -60,7 +60,7 @@ public class UtenteService {
             bcrypt.encode(payload.password()),
             payload.nome(),
             payload.cognome(),
-            payload.ruolo()
+            payload.ruolo().toString()
     );
 
 
