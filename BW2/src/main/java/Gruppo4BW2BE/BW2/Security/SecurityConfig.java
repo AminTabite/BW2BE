@@ -9,6 +9,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -19,14 +21,8 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-
-    //Bean che crypta le password sul db
-    @Bean
-    public PasswordEncoder getBCrypt(){
-
-        return new BCryptPasswordEncoder(12);
-
-    }
+    @Autowired
+    private JWTFilter jwtFilter;
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -64,19 +60,9 @@ public class SecurityConfig {
 
         httpSecurity.authorizeHttpRequests(req -> req
                 .requestMatchers("/**").permitAll() //endpoint disponibili con autenticazione
-
-
-//                //endpoint disponibili SOLO DOPO AUTENTICAZIONE
-//                .requestMatchers("/clienti/**").hasAnyRole("USER", "ADMIN")
-//                        .requestMatchers("/fatture/**").hasAuthority( "ADMIN")
-//                        .requestMatchers("/fatture/{id}").hasAuthority("ADMIN")
-//                        .requestMatchers("/clienti/**").hasAnyRole("USER", "ADMIN")
-//
-//                        .requestMatchers("/utenti/**").hasAnyRole("USER", "ADMIN")
-//
-////                .requestMatchers("//**").hasRole("USER")
-//                .anyRequest().authenticated()
         );
+
+        httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return  httpSecurity.build();
 
