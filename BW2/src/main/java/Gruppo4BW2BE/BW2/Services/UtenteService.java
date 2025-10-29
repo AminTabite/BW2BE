@@ -46,19 +46,23 @@ public class UtenteService {
     //Salvataggio Utente
 
     public Utente saveNewUtente(UtentePayload payload){
+        //in caso l'utente non inserisce ruolo oppure e' null
+
+         String ruoloDaAssegnare = (payload.ruolo() == null || payload.ruolo().isBlank())
+                ? "ROLE_USER"
+
+                : payload.ruolo();
+
 
     Utente newUtente = new Utente(
             payload.username(),
             payload.email(),
             bcrypt.encode(payload.password()),
             payload.nome(),
-            payload.cognome()
+            payload.cognome(),
+            payload.ruolo()
     );
-         //per mettere di default il ruolo di user
-        Ruolo ruoloUser = ruoloRepository.findByNome("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("Ruolo ROLE_USER non trovato!"));
 
-        newUtente.getRuoli().add(ruoloUser);
 
 
 
@@ -132,7 +136,13 @@ public void findByIdAndDelete(UUID utenteId){
          Ruolo ruolofound = ruoloRepository.findByNome(nomeRuolo)
                 .orElseThrow(() -> new RuntimeException("Ruolo non trovato: " + nomeRuolo));
 
-        found.getRuoli().add(ruolofound);
+
+        if (!nomeRuolo.startsWith("ROLE_")) {
+            throw new IllegalArgumentException("Il ruolo deve iniziare con 'ROLE_'");
+        }
+
+
+        found.setRuolo(nomeRuolo);
         utenteRepository.save(found);
     }
 

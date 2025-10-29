@@ -37,8 +37,6 @@ public class Utente implements UserDetails {
     @Column(name = "avatar_url")
     private String avatarURL;
 
-    @OneToMany(mappedBy = "id")
-    List<Cliente> clienti;
 
     @ManyToMany
     @JoinTable(
@@ -47,25 +45,23 @@ public class Utente implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "id")
     )
 
-    private List<Ruolo> ruoli = new ArrayList<>();
+    private String ruolo;
 
 
-    public Utente( String username, String email, String password, String nome, String cognome) {
+    public Utente(String username, String email, String password, String nome, String cognome, String ruolo) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.nome = nome;
         this.cognome = cognome;
+        this.ruolo = ruolo;
     }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return ruoli.stream()
-                .map(ruolo -> (GrantedAuthority) () -> ruolo.getNome())
-                .toList();
+        return List.of((GrantedAuthority) () -> this.ruolo);
     }
-
     @Override
     public boolean isAccountNonExpired() {
         return UserDetails.super.isAccountNonExpired();
