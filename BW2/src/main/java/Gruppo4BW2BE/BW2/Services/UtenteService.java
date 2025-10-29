@@ -60,7 +60,7 @@ public class UtenteService {
             bcrypt.encode(payload.password()),
             payload.nome(),
             payload.cognome(),
-            payload.ruolo().toString()
+            payload.ruolo()
     );
 
 
