@@ -113,23 +113,6 @@ public void findByIdAndDelete(UUID utenteId){
         return this.utenteRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Utente con l'email  non è stato trovato"));
     }
 
-    // Assegna ruolo (admin)
-    public Utente assignRole(UUID utenteId, String ruoloNome) {
-        Utente u = findById(utenteId);
-        Ruolo r = ruoloRepository.findByNome(ruoloNome)
-                .orElseThrow(() -> new NotFoundException("Ruolo non trovato: " + ruoloNome));
-        if (!u.getRuoli().contains(r)) u.getRuoli().add(r);
-        return utenteRepository.save(u);
-    }
-
-    //rimuove ruolo (admin)
-    public Utente removeRole(UUID utenteId, String ruoloNome) {
-        Utente u = findById(utenteId);
-        Ruolo r = ruoloRepository.findByNome(ruoloNome)
-                .orElseThrow(() -> new NotFoundException("Ruolo non trovato: " + ruoloNome));
-        u.getRuoli().removeIf(rr -> rr.getId().equals(r.getId()));
-        return utenteRepository.save(u);
-    }
 
     public void assegnaRuolo(UUID utenteId, String nomeRuolo) {
          Utente found = findById(utenteId);
