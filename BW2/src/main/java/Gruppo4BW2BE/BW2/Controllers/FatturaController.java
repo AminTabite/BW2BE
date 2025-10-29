@@ -34,7 +34,7 @@ public class FatturaController {
 
     //aggiornamento
     @PutMapping("/{id}")
-    public ResponseEntity<Fattura> update(@PathVariable Long id, @RequestBody Fattura fattura) {
+    public ResponseEntity<Fattura> update(@PathVariable UUID id, @RequestBody Fattura fattura) {
         //chiama il service per aggiornare la fattura esistente
         Fattura updated = service.update(id, fattura);
         return ResponseEntity.ok(updated);
@@ -42,7 +42,7 @@ public class FatturaController {
 
     //elimina
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         //chiama il service per eliminare la fattura
         service.delete(id);
         return ResponseEntity.noContent().build();
@@ -50,7 +50,7 @@ public class FatturaController {
 
     //ricerca per Id
     @GetMapping("/{id}")
-    public ResponseEntity<Fattura> findById(@PathVariable Long id) {
+    public ResponseEntity<Fattura> findById(@PathVariable UUID id) {
         //chiama il service per recuperare la fattura tramite ID
         return ResponseEntity.ok(service.findById(id));
     }

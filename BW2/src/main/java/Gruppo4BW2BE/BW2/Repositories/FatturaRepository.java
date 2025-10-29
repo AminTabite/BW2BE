@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public interface FatturaRepository extends JpaRepository<Fattura, Long> {
+public interface FatturaRepository extends JpaRepository<Fattura, UUID> {
     @Query(
             //value query principale per recuperare i dati
             //countQuery query per calcolare il numero totale di risultati

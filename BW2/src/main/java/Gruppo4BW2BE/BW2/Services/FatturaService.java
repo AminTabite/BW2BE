@@ -33,13 +33,13 @@ public class FatturaService {
     }
 
     //trova per ID
-    public Fattura findById(Long id) {
+    public Fattura findById(UUID id) {
         return fatturaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Fattura non trovata con id: " + id));
     }
 
     //modifica
-    public Fattura update(Long id, Fattura nuovaFattura) {
+    public Fattura update(UUID id, Fattura nuovaFattura) {
         Fattura esistente = findById(id);
 
         esistente.setNumero(nuovaFattura.getNumero());
@@ -52,7 +52,7 @@ public class FatturaService {
     }
 
     //elimina
-    public void delete(Long id) {
+    public void delete(UUID id) {
         if (!fatturaRepository.existsById(id)) {
             throw new NotFoundException("Fattura non trovata con id: " + id);
         }
