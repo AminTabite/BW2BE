@@ -44,6 +44,7 @@ public class UtenteController {
 // creazione utente
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public Utente createNewUtente(@RequestBody UtentePayload payload) {
 
         return utenteService.saveNewUtente(payload);
@@ -66,13 +67,5 @@ public class UtenteController {
         return utenteCorrente;
     }
 
-    // Creazione da admin (può settare ruoli)
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    public ResponseEntity<Utente> createByAdmin(@RequestBody Utente payload) {
-        UtenteController service = null;
-        ResponseEntity<Utente> created = service.createByAdmin(payload);
-        return ResponseEntity.status(201).body(created.getBody());
-    }
     
 }

@@ -46,13 +46,15 @@ public class UtenteService {
     //Salvataggio Utente
 
     public Utente saveNewUtente(UtentePayload payload){
-        //in caso l'utente non inserisce ruolo oppure e' null
-//
-//         String ruoloDaAssegnare = (payload.ruolo() == null || payload.ruolo().isBlank())
-//                ? "ROLE_USER"
-//
-//                : payload.ruolo();
+      //  in caso l'utente non inserisce ruolo oppure e' null
 
+         String ruoloDaAssegnare = (payload.ruolo() == null || payload.ruolo().isBlank())
+                ? "ROLE_USER"
+
+                : payload.ruolo();
+
+         Ruolo ruoloEntity = ruoloRepository.findByNome(ruoloDaAssegnare)
+                .orElseThrow(() -> new RuntimeException("Ruolo non trovato: " + ruoloDaAssegnare));
 
     Utente newUtente = new Utente(
             payload.username(),
@@ -60,10 +62,8 @@ public class UtenteService {
             bcrypt.encode(payload.password()),
             payload.nome(),
             payload.cognome(),
-            payload.ruolo().toString()
+            ruoloEntity
     );
-
-
 
 
     Utente savedUtente = utenteRepository.save(newUtente);
@@ -124,9 +124,10 @@ public void findByIdAndDelete(UUID utenteId){
             throw new IllegalArgumentException("Il ruolo deve iniziare con 'ROLE_'");
         }
 
+        found.getRuolo().add(ruolofound);
 
-        found.setRuolo(nomeRuolo);
         utenteRepository.save(found);
+
     }
 
 
