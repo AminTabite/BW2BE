@@ -36,19 +36,19 @@ public class SecurityConfig {
                 sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         httpSecurity.authorizeHttpRequests(req -> req
-                .requestMatchers("/auth/**").permitAll() //endpoint disponibili con autenticazione
+                .requestMatchers("/**").permitAll() //endpoint disponibili con autenticazione
 
 
-                //endpoint disponibili SOLO DOPO AUTENTICAZIONE
-                .requestMatchers("/clienti/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/fatture/**").hasAuthority( "ADMIN")
-                        .requestMatchers("/fatture/{id}").hasAuthority("ADMIN")
-                        .requestMatchers("/clienti/**").hasAnyRole("USER", "ADMIN")
-
-                        .requestMatchers("/utenti/**").hasAnyRole("USER", "ADMIN")
-
-//                .requestMatchers("//**").hasRole("USER")
-                .anyRequest().authenticated()
+//                //endpoint disponibili SOLO DOPO AUTENTICAZIONE
+//                .requestMatchers("/clienti/**").hasAnyRole("USER", "ADMIN")
+//                        .requestMatchers("/fatture/**").hasAuthority( "ADMIN")
+//                        .requestMatchers("/fatture/{id}").hasAuthority("ADMIN")
+//                        .requestMatchers("/clienti/**").hasAnyRole("USER", "ADMIN")
+//
+//                        .requestMatchers("/utenti/**").hasAnyRole("USER", "ADMIN")
+//
+////                .requestMatchers("//**").hasRole("USER")
+//                .anyRequest().authenticated()
         );
 
         return  httpSecurity.build();
