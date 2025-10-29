@@ -2,6 +2,7 @@ package Gruppo4BW2BE.BW2.Entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class Indirizzo {
 
     @Id
@@ -25,26 +27,22 @@ public class Indirizzo {
     @Column(nullable = false)
     private String civico;
 
-    @Column(nullable = false)
+    @Column()
     private String localita;
 
     @Column(nullable = false)
     private int cap;
 
-    @Column(nullable = false)
-    private String comune;
+    @ManyToOne
+    @JoinColumn(name = "comune_id", nullable = false)
+    private Comune comune;
 
-    public Indirizzo() {
 
-    }
-
-    public Indirizzo(UUID id, String via, String civico, String localita, int cap, String comune) {
-        this.id = id;
+    public Indirizzo(String via, String civico, String localita, int cap, Comune comune) {
         this.via = via;
         this.civico = civico;
         this.localita = localita;
         this.cap = cap;
         this.comune = comune;
     }
-
 }

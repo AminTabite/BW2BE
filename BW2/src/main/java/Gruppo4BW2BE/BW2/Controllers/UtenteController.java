@@ -7,6 +7,7 @@ import Gruppo4BW2BE.BW2.Services.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -57,8 +58,10 @@ public class UtenteController {
         utenteService.findByIdAndDelete(utenteId);
 
     }
-
-
-
+    // Profilo Utente
+    @GetMapping("/me")
+    public Utente getMyProfile(@AuthenticationPrincipal Utente utenteCorrente) {
+        return utenteCorrente;
+    }
 
 }
