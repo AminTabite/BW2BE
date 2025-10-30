@@ -33,12 +33,11 @@ public class Indirizzo {
     @Column(nullable = false)
     private int cap;
 
-    @ManyToOne
-    @JoinColumn(name = "comune_id", nullable = false)
-    private Comune comune;
+    @Column()
+    private String comune;
 
 
-    public Indirizzo(String via, String civico, String localita, int cap, Comune comune) {
+    public Indirizzo(String via, String civico, String localita, int cap, String comune) {
         this.via = via;
         this.civico = civico;
         this.localita = localita;

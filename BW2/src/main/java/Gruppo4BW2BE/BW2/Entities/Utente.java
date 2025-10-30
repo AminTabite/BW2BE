@@ -2,6 +2,7 @@ package Gruppo4BW2BE.BW2.Entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,7 +38,7 @@ public class Utente implements UserDetails {
     private String avatarURL;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "utenti_ruoli",
             joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "id"),
