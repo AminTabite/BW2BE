@@ -3,61 +3,69 @@ package Gruppo4BW2BE.BW2.Services;
 import Gruppo4BW2BE.BW2.Entities.StatoFattura;
 import Gruppo4BW2BE.BW2.Exceptions.NotFoundException;
 import Gruppo4BW2BE.BW2.Repositories.StatoFatturaRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
-@Transactional
 public class StatoFatturaService {
 
-    private final StatoFatturaRepository repo;
+    @Autowired
+    private StatoFatturaRepository statoFatturaRepository;
 
-    public StatoFatturaService(StatoFatturaRepository repo) {
-        this.repo = repo;
+    // ✅ Recuperare tutti gli stati paginati
+    public Page<StatoFattura> getAllStatiFattura(int pageNumber, int pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+        return statoFatturaRepository.findAll(pageable);
     }
 
-    public StatoFattura create(StatoFattura payload) {
-        if (payload == null) throw new IllegalArgumentException("Payload vuoto");
-        if (payload.getCode() == null || payload.getCode().isBlank())
-            throw new IllegalArgumentException("Code obbligatorio");
-        if (repo.existsByCode(payload.getCode()))
-            throw new IllegalArgumentException("Code già presente: " + payload.getCode());
-        return repo.save(payload);
-    }
-
-    public StatoFattura findById(UUID id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new NotFoundException("StatoFattura non trovato con id: " + id.toString()));
-    }
-
-    public StatoFattura findByCode(String code) {
-        return repo.findByCode(code)
-                .orElseThrow(() -> new NotFoundException("StatoFattura non trovato con code: " + code));
-    }
-
-    public StatoFattura update(UUID id, StatoFattura payload) {
-        StatoFattura existing = findById(id);
-        if (payload.getCode() != null && !payload.getCode().isBlank()) {
-            //se cambia il code e il nuovo code è già presente -> error
-            if (!existing.getCode().equals(payload.getCode()) && repo.existsByCode(payload.getCode())) {
-                throw new IllegalArgumentException("Code già presente: " + payload.getCode());
-            }
-            existing.setCode(payload.getCode());
+    // ✅ Creazione nuovo stato fattura
+    public StatoFattura createStatoFattura(String nome) {
+        if (statoFatturaRepository.findByStatoFattura(nome).isPresent()) {
+            throw new RuntimeException("Stato fattura già esistente: " + nome);
         }
-        if (payload.getDescription() != null) existing.setDescription(payload.getDescription());
-        return repo.save(existing);
+
+        StatoFattura newStato = new StatoFattura(null, nome);
+        StatoFattura saved = statoFatturaRepository.save(newStato);
+
+        log.info("Stato fattura '{}' creato correttamente!", nome);
+        return saved;
     }
 
-    public void delete(UUID id) {
-        if (!repo.existsById(id)) throw new NotFoundException("StatoFattura non trovato con id: " + id.toString());
-        repo.deleteById(id);
+    // ✅ find by ID
+    public StatoFattura findById(UUID id) {
+        return statoFatturaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Stato fattura non trovato", id));
     }
 
-    public Page<StatoFattura> list(Pageable pageable) {
-        return repo.findAll(pageable);
+//    // ✅ findById and Update
+//    public StatoFattura findByIdAndUpdate(UUID id) {
+//        StatoFattura found = statoFatturaRepository.findById(id)
+//                .orElseThrow(() -> new NotFoundException("Stato fattura non trovato", id));
+//
+//        found.setStatoFattura(nuovoNome);
+//        return statoFatturaRepository.save(found);
+//    }
+
+    // ✅ findById and Delete
+    public void findByIdAndDelete(UUID id) {
+        StatoFattura found = statoFatturaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Stato fattura non trovato", id));
+
+        statoFatturaRepository.delete(found);
+        log.info("Stato fattura con ID {} eliminato correttamente.", id);
+    }
+
+    // ✅ find by nome
+    public StatoFattura findByNome(String nome) {
+        return statoFatturaRepository.findByStatoFattura(nome)
+                .orElseThrow(() -> new RuntimeException("Stato fattura non trovato: " + nome));
     }
 }

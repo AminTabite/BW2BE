@@ -1,3 +1,4 @@
+
 package Gruppo4BW2BE.BW2.Repositories;
 
 import Gruppo4BW2BE.BW2.Entities.StatoFattura;
@@ -7,6 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface StatoFatturaRepository extends JpaRepository<StatoFattura, UUID> {
-    Optional<StatoFattura> findByCode(String code);
-    boolean existsByCode(String code);
+    Optional<StatoFattura> findByStatoFattura(String statoFattura);
+    boolean existsByStatoFattura(String statoFattura);
 }

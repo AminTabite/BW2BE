@@ -4,17 +4,22 @@ import Gruppo4BW2BE.BW2.Entities.Cliente;
 import Gruppo4BW2BE.BW2.Entities.Fattura;
 import Gruppo4BW2BE.BW2.Entities.StatoFattura;
 import Gruppo4BW2BE.BW2.Exceptions.NotFoundException;
+import Gruppo4BW2BE.BW2.Payloads.FatturaPayload;
 import Gruppo4BW2BE.BW2.Repositories.ClienteRepository;
 import Gruppo4BW2BE.BW2.Repositories.FatturaRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
+@Slf4j
 @Service
 public class FatturaService {
 
@@ -24,61 +29,74 @@ public class FatturaService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    //crea nuova fattura
-    public Fattura create(Fattura fattura, UUID clienteId) {
+    // ✅ Crea nuova fattura
+    public Fattura saveNewFattura(FatturaPayload payload, UUID clienteId) {
+
         Cliente cliente = clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new NotFoundException("Cliente non trovato con id: " + clienteId));
-        fattura.setCliente(cliente);
-        return fatturaRepository.save(fattura);
+                .orElseThrow(() -> new NotFoundException("Cliente non trovato", clienteId));
+
+        Fattura newFattura = new Fattura(
+                payload.numero(),
+                payload.data(),
+                payload.importo(),
+                payload.stato(),
+                cliente
+        );
+
+        Fattura saved = fatturaRepository.save(newFattura);
+        log.info("Fattura n. {} salvata correttamente", saved.getNumero());
+        return saved;
     }
 
-    //trova per ID
-    public Fattura findById(UUID id) {
+    // ✅ Trova fattura per ID
+    public Fattura findById(UUID id){
         return fatturaRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("FatturaPayload non trovata con id: " + id));
+                .orElseThrow(() -> new NotFoundException("Fattura non trovata", id));
     }
 
-    //modifica
-    public Fattura update(UUID id, Fattura nuovaFattura) {
-        Fattura esistente = findById(id);
+    // ✅ Update fattura
+    public Fattura findByIdAndUpdate(UUID id, FatturaPayload payload, UUID clienteId){
 
-        esistente.setNumero(nuovaFattura.getNumero());
-        esistente.setData(nuovaFattura.getData());
-        esistente.setImporto(nuovaFattura.getImporto());
-        esistente.setStato(nuovaFattura.getStato());
-        esistente.setCliente(nuovaFattura.getCliente());
+        Fattura found = findById(id);
 
-        return fatturaRepository.save(esistente);
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new NotFoundException("Cliente non trovato", clienteId));
+
+        found.setNumero(payload.numero());
+        found.setData(payload.data());
+        found.setImporto(payload.importo());
+        found.setStato(payload.stato());
+        found.setCliente(cliente);
+
+        return fatturaRepository.save(found);
     }
 
-    //elimina
-    public void delete(UUID id) {
-        if (!fatturaRepository.existsById(id)) {
-            throw new NotFoundException("FatturaPayload non trovata con id: " + id);
-        }
-        fatturaRepository.deleteById(id);
+    // ✅ Elimina fattura
+    public void findByIdAndDelete(UUID id){
+
+        Fattura found = findById(id);
+        fatturaRepository.delete(found);
+
+        log.info("Fattura {} eliminata correttamente.", id);
     }
 
-    public Page<Fattura> listaPaginata(Pageable pageable) {
+    // ✅ Lista paginata
+    public Page<Fattura> getAllFatture(int pageNumber, int pageSize, String sortBy){
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         return fatturaRepository.findAll(pageable);
     }
 
+    // ✅ Cambia stato fattura
     public Fattura cambiaStato(UUID id, StatoFattura nuovoStato) {
-        Fattura fattura = fatturaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("FatturaPayload non trovata"));
+        Fattura fattura = findById(id);
         fattura.setStato(nuovoStato);
         return fatturaRepository.save(fattura);
     }
 
-    public Page<Fattura> getFattureByStato(StatoFattura stato, Pageable pageable) {
-        return fatturaRepository.findByStato(stato, pageable);
-    }
-
+    // ✅ Filtri avanzati
     public Page<Fattura> search(Long clienteId, String stato, LocalDate data,
                                 Integer anno, BigDecimal importoMin, BigDecimal importoMax, Pageable pageable) {
 
         return fatturaRepository.filtraFatture(clienteId, stato, data, anno, importoMin, importoMax, pageable);
     }
 }
-
-

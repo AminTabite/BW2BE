@@ -2,58 +2,79 @@ package Gruppo4BW2BE.BW2.Controllers;
 
 import Gruppo4BW2BE.BW2.Entities.StatoFattura;
 import Gruppo4BW2BE.BW2.Services.StatoFatturaService;
+import Gruppo4BW2BE.BW2.Exceptions.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/statifattura")
+@RequestMapping("/api/stati-fattura")
 public class StatoFatturaController {
 
-    private final StatoFatturaService service;
+    @Autowired
+    private StatoFatturaService statoFatturaService;
 
-    public StatoFatturaController(StatoFatturaService service) {
-        this.service = service;
+    // ✅ Recuperare tutti gli stati fattura con paginazione
+    @GetMapping
+    public ResponseEntity<Page<StatoFattura>> getAllStatiFattura(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "statoFattura") String sortBy
+    ) {
+        Page<StatoFattura> result = statoFatturaService.getAllStatiFattura(page, size, sortBy);
+        return ResponseEntity.ok(result);
     }
 
-    //crea uno stato fattura
+    // ✅ Creare un nuovo stato fattura
     @PostMapping
-    public ResponseEntity<StatoFattura> create(@RequestBody StatoFattura s) {
-        StatoFattura created = service.create(s);
-        return ResponseEntity.ok(created);
+    public ResponseEntity<StatoFattura> createStatoFattura(@RequestParam String nome) {
+        StatoFattura created = statoFatturaService.createStatoFattura(nome);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    //recupera stato per id
+    // ✅ Recuperare uno stato fattura per ID
     @GetMapping("/{id}")
-    public ResponseEntity<StatoFattura> findById(@PathVariable UUID id) {
-        return ResponseEntity.ok(service.findById(id));
+    public ResponseEntity<StatoFattura> getStatoFatturaById(@PathVariable UUID id) {
+        StatoFattura stato = statoFatturaService.findById(id);
+        return ResponseEntity.ok(stato);
     }
+//
+//    // ✅ Aggiornare uno stato fattura per ID
+//    @PutMapping("/{id}")
+//    public ResponseEntity<StatoFattura> updateStatoFattura(
+//            @PathVariable UUID id,
+//            @RequestParam String nuovoNome
+//    ) {
+//        StatoFattura updated = statoFatturaService.findByIdAndUpdate(id,);
+//        return ResponseEntity.ok(updated);
+//    }
 
-    //recupera stato per code (es. /api/statifattura/code/EMESSA)
-    @GetMapping("/code/{code}")
-    public ResponseEntity<StatoFattura> findByCode(@PathVariable String code) {
-        return ResponseEntity.ok(service.findByCode(code));
-    }
-
-    //aggiorna stato
-    @PutMapping("/{id}")
-    public ResponseEntity<StatoFattura> update(@PathVariable UUID id, @RequestBody StatoFattura s) {
-        return ResponseEntity.ok(service.update(id, s));
-    }
-
-    //elimina stato
+    // ✅ Eliminare uno stato fattura per ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        service.delete(id);
+    public ResponseEntity<Void> deleteStatoFattura(@PathVariable UUID id) {
+        statoFatturaService.findByIdAndDelete(id);
         return ResponseEntity.noContent().build();
     }
 
-    //lista paginata
-    @GetMapping
-    public ResponseEntity<Page<StatoFattura>> list(Pageable pageable) {
-        return ResponseEntity.ok(service.list(pageable));
+    // ✅ Recuperare uno stato fattura per nome
+    @GetMapping("/search")
+    public ResponseEntity<StatoFattura> getStatoFatturaByNome(@RequestParam String nome) {
+        StatoFattura stato = statoFatturaService.findByNome(nome);
+        return ResponseEntity.ok(stato);
+    }
+
+    // ✅ Gestione semplice delle eccezioni
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

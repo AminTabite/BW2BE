@@ -51,6 +51,15 @@ public class Fattura {
 
     public Fattura() {}
 
+    public Fattura(String numero, LocalDate data, BigDecimal importo, StatoFattura stato, Cliente cliente) {
+        this.numero = numero;
+        this.data = data;
+        this.importo = importo;
+        this.stato = stato;
+        this.cliente = cliente;
+    }
+
+
     //getter e setter
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
