@@ -32,12 +32,12 @@ public class Fattura {
     private BigDecimal importo;
 
     //relazione con cliente
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Cliente cliente;
 
     //stato come stringa
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "state_id", nullable = false)
     @NotNull
     private StatoFattura stato;
