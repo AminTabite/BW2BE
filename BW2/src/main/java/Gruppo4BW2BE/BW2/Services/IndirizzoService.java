@@ -2,52 +2,67 @@ package Gruppo4BW2BE.BW2.Services;
 
 import Gruppo4BW2BE.BW2.Entities.Indirizzo;
 import Gruppo4BW2BE.BW2.Exceptions.NotFoundException;
+import Gruppo4BW2BE.BW2.Payloads.IndirizzoPayload;
 import Gruppo4BW2BE.BW2.Repositories.IndirizzoRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class IndirizzoService {
 
     @Autowired
     private IndirizzoRepository indirizzoRepository;
 
-    //crea un nuovo indirizzo
-    public Indirizzo create(Indirizzo indirizzo) {
-        return indirizzoRepository.save(indirizzo);
+    // ✅ Crea nuovo indirizzo (stile UtenteService -> saveNewUtente)
+    public Indirizzo saveNewIndirizzo(IndirizzoPayload payload) {
+        Indirizzo newIndirizzo = new Indirizzo(
+                payload.via(),
+                payload.civico(),
+                payload.localita(),
+                payload.cap(),
+                payload.comune()
+        );
+
+        Indirizzo saved = indirizzoRepository.save(newIndirizzo);
+        log.info("Indirizzo salvato correttamente! ID: " + saved.getId());
+        return saved;
     }
 
-    //trova indirizzo per ID
-    public Indirizzo findByID(UUID id) {
+    // ✅ findByID (stile findById)
+    public Indirizzo findById(UUID id) {
         return indirizzoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Indirizzo non trovato con id: " + id));
+                .orElseThrow(() -> new NotFoundException("Indirizzo non trovato", id));
     }
 
-    //aggiorna un indirizzo
-    public Indirizzo update(UUID id, Indirizzo indirizzoAggiornato) {
-        Indirizzo indirizzoEsistente = findByID(id);
+    // ✅ update (stile findByIdAndUpdate)
+    public Indirizzo findByIdAndUpdate(UUID id, IndirizzoPayload payload) {
+        Indirizzo found = this.findById(id);
 
-        indirizzoEsistente.setVia(indirizzoAggiornato.getVia());
-        indirizzoEsistente.setCivico(indirizzoAggiornato.getCivico());
-        indirizzoEsistente.setLocalita(indirizzoAggiornato.getLocalita());
-        indirizzoEsistente.setCap(indirizzoAggiornato.getCap());
-        indirizzoEsistente.setComune(indirizzoAggiornato.getComune());
+        found.setVia(payload.via());
+        found.setCivico(payload.civico());
+        found.setLocalita(payload.localita());
+        found.setCap(payload.cap());
+        found.setComune(payload.comune());
 
-        return indirizzoRepository.save(indirizzoEsistente);
+        Indirizzo updated = indirizzoRepository.save(found);
+        log.info("Indirizzo con ID " + id + " aggiornato correttamente.");
+        return updated;
     }
 
-    //elimina un indirizzo
-    public void delete(UUID id) {
-        if (!indirizzoRepository.existsById(id)) {
-            throw new NotFoundException("Indirizzo non trovato con id: " + id);
-        }
-        indirizzoRepository.deleteById(id);
+    // ✅ delete (stile findByIdAndDelete)
+    public void findByIdAndDelete(UUID id) {
+        Indirizzo found = this.findById(id);
+        indirizzoRepository.delete(found);
+        log.info("Indirizzo con ID " + id + " eliminato correttamente.");
     }
 
-    //restituisce tutti gli indirizzi (paginati)
+    // ✅ lista paginata (stile getAllClienti)
     public Page<Indirizzo> listaPaginata(Pageable pageable) {
         return indirizzoRepository.findAll(pageable);
     }

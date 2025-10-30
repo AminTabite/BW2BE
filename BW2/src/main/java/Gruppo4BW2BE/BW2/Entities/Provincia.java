@@ -25,10 +25,10 @@ public class Provincia {
 
     @Column(nullable = false)
     private String regione;
-
-    @OneToMany(mappedBy = "provincia")
-    @ToString.Exclude
-    private List<Comune> comuni;
+//
+//    @OneToMany(mappedBy = "provincia")
+//    @ToString.Exclude
+//    private List<Comune> comuni;
 
     public Provincia(String sigla, String nome, String regione) {
         this.sigla = sigla;

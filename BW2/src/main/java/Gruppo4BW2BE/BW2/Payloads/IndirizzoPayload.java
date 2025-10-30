@@ -8,7 +8,7 @@ public record IndirizzoPayload(
         String civico,
         String localita,
         int cap,
-        Comune comune
+        String comune
 
 
 

@@ -1,11 +1,13 @@
 package Gruppo4BW2BE.BW2.Controllers;
 
 import Gruppo4BW2BE.BW2.Entities.Indirizzo;
+import Gruppo4BW2BE.BW2.Payloads.IndirizzoPayload;
 import Gruppo4BW2BE.BW2.Services.IndirizzoService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.UUID;
 
 @RestController
@@ -14,41 +16,42 @@ public class IndirizzoController {
 
     private final IndirizzoService indirizzoService;
 
-    public IndirizzoController(IndirizzoService indirizziService) {
-        this.indirizzoService = indirizziService;
+    public IndirizzoController(IndirizzoService indirizzoService) {
+        this.indirizzoService = indirizzoService;
     }
 
-    //crea un nuovo indirizzo
+    // ✅ Crea indirizzo (POST)
     @PostMapping
-    public ResponseEntity<Indirizzo> create(@RequestBody Indirizzo indirizzo) {
-        Indirizzo created = indirizzoService.create(indirizzo);
-        return ResponseEntity.ok(created);
+    public ResponseEntity<Indirizzo> create(@RequestBody IndirizzoPayload payload) {
+        Indirizzo saved = indirizzoService.saveNewIndirizzo(payload);
+        return ResponseEntity.ok(saved);
     }
 
-    //ottieni indirizzo per ID
+    // ✅ Trova indirizzo per ID (GET)
     @GetMapping("/{id}")
-    public ResponseEntity<Indirizzo> findById(@PathVariable UUID id) {
-        return ResponseEntity.ok(indirizzoService.findByID(id));
+    public ResponseEntity<Indirizzo> getById(@PathVariable UUID id) {
+        return ResponseEntity.ok(indirizzoService.findById(id));
     }
 
-    //aggiorna indirizzo
+    // ✅ Aggiorna indirizzo (PUT)
     @PutMapping("/{id}")
-    public ResponseEntity<Indirizzo> update(@PathVariable UUID id, @RequestBody Indirizzo indirizzo) {
-        Indirizzo updated = indirizzoService.update(id, indirizzo);
-        return ResponseEntity.ok(updated);
+    public ResponseEntity<Indirizzo> update(
+            @PathVariable UUID id,
+            @RequestBody IndirizzoPayload payload
+    ) {
+        return ResponseEntity.ok(indirizzoService.findByIdAndUpdate(id, payload));
     }
 
-    //elimina indirizzo
+    // ✅ Elimina indirizzo (DELETE)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        indirizzoService.delete(id);
+        indirizzoService.findByIdAndDelete(id);
         return ResponseEntity.noContent().build();
     }
 
-    //lista paginata di tutti gli indirizzi
+    // ✅ Lista paginata indirizzi (GET)
     @GetMapping
-    public ResponseEntity<Page<Indirizzo>> listaIndirizzi(Pageable pageable) {
-        Page<Indirizzo> indirizzi = indirizzoService.listaPaginata(pageable);
-        return ResponseEntity.ok(indirizzi);
+    public ResponseEntity<Page<Indirizzo>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(indirizzoService.listaPaginata(pageable));
     }
 }
