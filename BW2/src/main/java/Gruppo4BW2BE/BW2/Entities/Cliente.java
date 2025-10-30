@@ -52,11 +52,11 @@ public class Cliente {
     @Column(nullable = false)
     private TipoCliente tipoCliente;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "indirizzo_sede_legale_id", referencedColumnName = "id")
     private Indirizzo indirizzoSedeLegale;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "indirizzo_sede_operativa_id", referencedColumnName = "id")
     private Indirizzo indirizzoSedeOperativa;
 

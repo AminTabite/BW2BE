@@ -2,8 +2,8 @@ package Gruppo4BW2BE.BW2.Payloads;
 
 import Gruppo4BW2BE.BW2.Entities.Indirizzo;
 import Gruppo4BW2BE.BW2.Enums.TipoCliente;
-
 import java.time.LocalDate;
+import java.util.UUID;
 
 public record ClientePayload(
 
@@ -21,12 +21,8 @@ public record ClientePayload(
         String telefonoContatto,
         String logoAziendale,
         TipoCliente tipoCliente,
-        Indirizzo indirizzoSedeLegale,
-        Indirizzo indirizzoSedeOperativa
-
-
-
-
+        UUID indirizzoSedeLegaleId,
+        UUID indirizzoSedeOperativaId
 
 ) {
 }

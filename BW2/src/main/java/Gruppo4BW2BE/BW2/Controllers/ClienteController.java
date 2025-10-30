@@ -1,6 +1,7 @@
 package Gruppo4BW2BE.BW2.Controllers;
 
 import Gruppo4BW2BE.BW2.Entities.Cliente;
+import Gruppo4BW2BE.BW2.Payloads.ClientePayload;
 import Gruppo4BW2BE.BW2.Services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,7 +38,7 @@ public class ClienteController {
     // /clienti
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente creaNuovoCliente(@RequestBody Cliente clientePayload) {
+    public Cliente creaNuovoCliente(@RequestBody ClientePayload clientePayload) {
         return clienteService.saveNuovoCliente(clientePayload);
     }
 
