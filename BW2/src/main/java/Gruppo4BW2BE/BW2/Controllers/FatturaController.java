@@ -1,5 +1,6 @@
 package Gruppo4BW2BE.BW2.Controllers;
 
+import Gruppo4BW2BE.BW2.Entities.Cliente;
 import Gruppo4BW2BE.BW2.Entities.Fattura;
 import Gruppo4BW2BE.BW2.Entities.StatoFattura;
 import Gruppo4BW2BE.BW2.Payloads.FatturaPayload;
@@ -23,6 +24,22 @@ public class FatturaController {
     public FatturaController(FatturaService service) {
         this.service = service;
     }
+
+
+
+
+
+@GetMapping
+  public Page<Fattura> getTutteFatture(
+           @RequestParam(defaultValue = "0") int page,
+           @RequestParam(defaultValue = "10") int size,
+           @RequestParam(defaultValue = "id") String sort
+   ) {
+      return service.getAllFatture(page, size, sort);
+   }
+
+
+
 
     // ✅ Creazione fattura con Cliente associato
     @PostMapping("/cliente/{clienteId}")

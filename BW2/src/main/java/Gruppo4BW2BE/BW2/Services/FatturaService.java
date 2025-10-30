@@ -29,6 +29,19 @@ public class FatturaService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+//
+//    // Recuperare tutti i clienti paginati
+//    public Page<Fattura> getAllFatture(int pageNumber, int pageSize, String sortBy) {
+//        // Oggetto Pageable per la paginazione
+//        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+//        // Chiamiamo findAll
+//        return clienteRepository.findAll(pageable);
+//    }
+//
+
+
+
+
     // ✅ Crea nuova fattura
     public Fattura saveNewFattura(FatturaPayload payload, UUID clienteId) {
 
