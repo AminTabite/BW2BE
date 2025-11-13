@@ -78,8 +78,6 @@ public class UtenteService {
         return utenteRepository.findById(utenteId)
                 .orElseThrow(() -> new NotFoundException( "utente non trovato" , utenteId));
 
-    }
-
 
 public Utente findByIdAndUpdate(UUID utenteId, UtentePayload payload){
 

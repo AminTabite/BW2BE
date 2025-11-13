@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.util.UUID;
 import java.io.IOException;
 
@@ -55,7 +56,8 @@ public class JWTFilter extends OncePerRequestFilter {
 
         } catch (Exception e) {
 
-            throw new UnauthorizedException("Token non valido, scaduto o utente non trovato. Effettua nuovamente il login.");
+            throw new UnauthorizedException("Token non valido" +
+                    "");
         }
     }
 
